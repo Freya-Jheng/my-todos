@@ -1,0 +1,17 @@
+$white: #ffffff;
+$black: #000000;
+$tuna: #DB4C3F;
+
+:root {
+  --banner-bg-color: #{$tuna};
+
+  --main-bg-color: #{$white};
+  --main-font-color: #{$black};
+  --sub-font-color: #{$white};
+}
+
+[data-theme="darkMode"] {
+  --main-bg-color: #{$black};
+  --main-font-color: #{$white};
+  --sub-font-color: #{$black};
+}
