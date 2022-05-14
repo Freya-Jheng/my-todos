@@ -4,7 +4,7 @@
       <h1 class="signUp__top__title">My Todo</h1>
     </div>
     <div class="signUp__form">
-      <h1 class="signUp__form__title">Sign Up Your Account</h1>
+      <h1 class="signUp__form__title">Sign Up</h1>
       <form class="signUp__form__content">
         <div class="signUp__form__content__name">
           <span class="signUp__form__content__name__title"> 姓名 </span>
@@ -41,7 +41,7 @@
         </div>
         <div class="signUp__form__content__checked-password">
           <span class="signUp__form__content__checked-password__title">
-            密碼
+            確認密碼
           </span>
           <input
             type="text"
@@ -51,7 +51,7 @@
         </div>
         <div class="signUp__form__content__buttons">
           <router-link
-            to="/my-todo"
+            to="/my-todo/today"
             class="signUp__form__content__buttons__siginIn"
           >
             Submit
@@ -111,14 +111,20 @@
       width: 70%;
       max-width: 768px;
       margin-top: 60px;
+      gap: 25px;
       @include flex(column, center, center);
-      gap: 45px;
+      @include pad {
+        gap: 45px;
+      }
       &__account,
       &__password,
       &__name,
       &__checked-password,
       &__email {
-        width: 70%;
+        width: 100%;
+        @include pad {
+          width: 70%;
+        }
         @include flex(column, center, flex-start);
         gap: 5px;
         span {
@@ -129,10 +135,13 @@
         input {
           width: 100%;
           max-width: 768px;
-          height: 50px;
+          height: 40px;
           padding: 0 10px;
           background-color: #e4e0e0;
           border-radius: 4px;
+          @include pad {
+            height: 50px;
+          }
           &:focus,
           &:hover {
             border-bottom: 1px solid #2a2a2a;
@@ -140,16 +149,20 @@
         }
       }
       &__buttons {
-        width: 70%;
+        width: 100%;
         max-width: 768px;
-        margin-top: 50px;
+        margin: 25px 0;
+        @include pad {
+          width: 70%;
+          margin-top: 50px;
+        }
         @include flex(column, center, center);
         gap: 15px;
         &__siginIn,
         &__siginUp {
           width: 100%;
-          height: 50px;
-          line-height: 50px;
+          height: 35px;
+          line-height: 35px;
           cursor: pointer;
           color: #2a2a2a;
           text-align: center;
@@ -163,6 +176,8 @@
           @include pad {
             font-size: 25px;
             font-weight: 400;
+            height: 50px;
+          line-height: 50px;
           }
         }
       }

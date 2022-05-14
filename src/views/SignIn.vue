@@ -24,7 +24,7 @@
         </div>
         <div class="signIn__form__content__buttons">
           <router-link
-            to="/today"
+            to="/my-todo/today"
             class="signIn__form__content__buttons__siginIn"
           >
             Sign in
@@ -53,9 +53,12 @@
     text-align: center;
     line-height: 70px;
     &__title {
-      font-size: 35px;
+      font-size: 25px;
       font-family: "Barlow";
       font-weight: 400;
+      @include pad {
+        font-size: 35px;
+      }
     }
   }
   &__form {
@@ -83,12 +86,18 @@
     &__content {
       width: 70%;
       max-width: 768px;
-      margin-top: 100px;
+      margin-top: 50px;
       @include flex(column, center, center);
       gap: 45px;
+      @include pad {
+        margin-top: 100px;
+      }
       &__account,
       &__password {
-        width: 70%;
+        width: 100%;
+        @include pad {
+          width: 70%;
+        }
         @include flex(column, center, flex-start);
         gap: 5px;
         span {
@@ -99,10 +108,13 @@
         input {
           width: 100%;
           max-width: 768px;
-          height: 50px;
+          height: 40px;
           padding: 0 10px;
           background-color: #e4e0e0;
           border-radius: 4px;
+          @include pad {
+            height: 50px;
+          }
           &:focus,
           &:hover {
             border-bottom: 1px solid #2a2a2a;
@@ -110,16 +122,19 @@
         }
       }
       &__buttons {
-        width: 70%;
+        width: 100%;
         max-width: 768px;
         margin-top: 50px;
         @include flex(column, center, center);
         gap: 15px;
+        @include pad {
+          width: 70%;
+        }
         &__siginIn,
         &__siginUp {
           width: 100%;
-          height: 50px;
-          line-height: 50px;
+          height: 35px;
+          line-height: 35px;
           cursor: pointer;
           color: #2a2a2a;
           text-align: center;
@@ -133,6 +148,8 @@
           @include pad {
             font-size: 25px;
             font-weight: 400;
+            height: 50px;
+            line-height: 50px;
           }
         }
       }

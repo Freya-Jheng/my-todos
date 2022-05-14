@@ -1,11 +1,21 @@
 <template>
-  <div>
-    home
+  <div class="todo-home">
+    <Navbar />
+    <div class="todo-home__content-list">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script setup>
 import {ref, reactive} from 'vue'
-// import TodayList from '@/views/TodayList.vue'
-
+import Navbar from '@/components/Navbar.vue'
+import { RouterView } from 'vue-router'
 </script>
+
+<style scoped lang="scss">
+.todo-home {
+  width: 100%;
+}
+
+</style>
