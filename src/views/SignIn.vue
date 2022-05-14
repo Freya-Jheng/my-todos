@@ -6,27 +6,34 @@
     <div class="signIn__form">
       <h1 class="signIn__form__title">Sign In</h1>
       <form class="signIn__form__content">
-        <div class="signIn__form__content__account input">
+        <div class="signIn__form__content__account">
           <span class="signIn__form__content__account__title"> 帳號 </span>
-          <input type="text" class="signIn__form__content__account__input"
-          placeholder="xxx@example.com" 
+          <input
+            type="text"
+            class="signIn__form__content__account__input"
+            placeholder="xxx@example.com"
           />
         </div>
-        <div class="signIn__form__content__password input">
+        <div class="signIn__form__content__password">
           <span class="signIn__form__content__password__title"> 密碼 </span>
-          <input type="text" class="signIn__form__content__password__input"
-          placeholder="xxxxxxxx"
-           />
+          <input
+            type="text"
+            class="signIn__form__content__password__input"
+            placeholder="xxxxxxxx"
+          />
         </div>
         <div class="signIn__form__content__buttons">
-          <button class="signIn__form__content__buttons__siginIn">
-            Sign In
-          </button>
+          <router-link
+            to="/today"
+            class="signIn__form__content__buttons__siginIn"
+          >
+            Sign in
+          </router-link>
           <router-link
             class="signIn__form__content__buttons__siginUp"
-            to="/my-todo/signup"
+            to="/signup"
           >
-            <button>Sign Up</button>
+            Sign up
           </router-link>
         </div>
       </form>
@@ -40,52 +47,93 @@
   width: 100%;
   &__top {
     width: 100%;
-    height: 50px;
+    height: 70px;
     background-color: var(--banner-bg-color);
     color: var(--sub-font-color);
     text-align: center;
-    line-height: 50px;
+    line-height: 70px;
     &__title {
-      font-size: 25px;
+      font-size: 35px;
       font-family: "Barlow";
       font-weight: 400;
     }
   }
   &__form {
     width: 100%;
-    height: 20rem;
-    margin-top: 20%;
+    margin-top: 70px;
     @include flex(column, space-around, center);
     &__title {
+      position: relative;
       font-size: 30px;
       font-weight: 500;
-      border-bottom: 2px solid var(--main-font-color);
+      @include pad {
+        font-size: 45px;
+      }
+      &::after {
+        position: absolute;
+        content: "";
+        width: 120%;
+        height: 2px;
+        top: 125%;
+        right: 50%;
+        transform: translateX(50%);
+        background-color: var(--main-font-color);
+      }
     }
     &__content {
-      @include flex (column, center, center);
-      gap: 20px;
-      .input {
-        @include flex (column, center, flex-start);
-        gap: 5px;
-      }
-      input {
-        width: 15rem;
-        height: 25px;
-        border: 1px solid var(--main-font-color);
-        border-radius: 3px;
-      }
-      &__account {
-
-      }
+      width: 70%;
+      max-width: 768px;
+      margin-top: 100px;
+      @include flex(column, center, center);
+      gap: 45px;
+      &__account,
       &__password {
-
+        width: 70%;
+        @include flex(column, center, flex-start);
+        gap: 5px;
+        span {
+          @include pad {
+            font-size: 20px;
+          }
+        }
+        input {
+          width: 100%;
+          max-width: 768px;
+          height: 50px;
+          padding: 0 10px;
+          background-color: #e4e0e0;
+          border-radius: 4px;
+          &:focus,
+          &:hover {
+            border-bottom: 1px solid #2a2a2a;
+          }
+        }
       }
       &__buttons {
-        all: unset;
-        @include flex (column, center, center);
-        gap: 10px;
-        button {
-          width: 90px;
+        width: 70%;
+        max-width: 768px;
+        margin-top: 50px;
+        @include flex(column, center, center);
+        gap: 15px;
+        &__siginIn,
+        &__siginUp {
+          width: 100%;
+          height: 50px;
+          line-height: 50px;
+          cursor: pointer;
+          color: #2a2a2a;
+          text-align: center;
+          border: 1px solid #e2dcdc;
+          border-radius: 10px;
+          &:hover,
+          &:focus {
+            background-color: var(--banner-bg-color);
+            color: #ffffff;
+          }
+          @include pad {
+            font-size: 25px;
+            font-weight: 400;
+          }
         }
       }
     }

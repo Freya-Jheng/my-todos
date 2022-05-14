@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      redirect: '/my-todo/signin',
+      redirect: '/signin',
     },
     {
       path: '/my-todo',
@@ -36,12 +36,12 @@ const router = createRouter({
       ]
     },
     {
-      path: '/my-todo/signin',
+      path: '/signin',
       name: 'sign-in',
       component: SignIn,
     },
     {
-      path: '/my-todo/signup',
+      path: '/signup',
       name: 'sign-up',
       component: SignUp,
     },

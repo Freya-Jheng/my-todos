@@ -1,6 +1,10 @@
 $white: #ffffff;
 $black: #000000;
 $tuna: #DB4C3F;
+$black-2a: #2a2a2a;
+$white-E5: #E5E5E5;
+$grey-99: #999999;
+
 
 :root {
   --banner-bg-color: #{$tuna};
@@ -8,10 +12,12 @@ $tuna: #DB4C3F;
   --main-bg-color: #{$white};
   --main-font-color: #{$black};
   --sub-font-color: #{$white};
+  --form-border: #{$grey-99};
 }
 
 [data-theme="darkMode"] {
   --main-bg-color: #{$black};
   --main-font-color: #{$white};
   --sub-font-color: #{$black};
+  --form-border: #{$white-E5};
 }
