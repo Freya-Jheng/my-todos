@@ -6,15 +6,18 @@ $white-E5: #E5E5E5;
 $grey-99: #999999;
 $grey-FA: #FAFAFA;
 $grey-EE: #EEEEEE;
+$grey-E4: #e4e0e0;
+$white-E2: #e2dcdc;
 
 
 :root {
   --banner-bg-color: #{$tuna};
   --nav-bg-color: #{$grey-FA};
   --nav-hover-color: #{$grey-EE};
+  --input-bg-color: #{$grey-E4};
 
   --main-bg-color: #{$white};
-  --main-font-color: #{$black};
+  --main-font-color: #{$black-2a};
   --sub-font-color: #{$white};
   --form-border: #{$grey-99};
 }

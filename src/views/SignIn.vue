@@ -110,7 +110,7 @@
           max-width: 768px;
           height: 40px;
           padding: 0 10px;
-          background-color: #e4e0e0;
+          background-color: var(--input-bg-color);
           border-radius: 4px;
           @include pad {
             height: 50px;
@@ -136,7 +136,7 @@
           height: 35px;
           line-height: 35px;
           cursor: pointer;
-          color: #2a2a2a;
+          color: var(--main-font-color);
           text-align: center;
           border: 1px solid #e2dcdc;
           border-radius: 10px;
