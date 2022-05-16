@@ -83,6 +83,12 @@
       font-size: 35px;
       font-family: "Barlow";
       font-weight: 400;
+      @include pad {
+        font-size: 45px;
+      }
+      @include pc {
+        font-size: 50px;
+      }
     }
   }
   &__form {

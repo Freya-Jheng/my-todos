@@ -57,6 +57,9 @@
       font-family: "Barlow";
       font-weight: 400;
       @include pad {
+        font-size: 30px;
+      }
+      @include pc {
         font-size: 35px;
       }
     }

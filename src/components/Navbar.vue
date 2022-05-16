@@ -38,11 +38,18 @@
           <option value="Travel">Travel</option>
           <option value="Study">Study</option>
         </select> -->
+        <router-link
+        to="/signin"
+         class="todo-home__navbar__left__nav__sign-out">
+          <font-awesome-icon
+            class="todo-home__navbar__left__nav__sign-out-icon"
+            :icon="['fa', 'arrow-right-from-bracket']"
+          />
+        </router-link>
       </nav>
-      <font-awesome-icon
-        class="todo-home__navbar__left__home icons"
-        :icon="['fa', 'home']"
-      />
+      <router-link to="/my-todo/today" class="todo-home__navbar__left__home">
+        <font-awesome-icon class="home-icon icons" :icon="['fa', 'home']" />
+      </router-link>
       <input
         type="checkbox"
         class="todo-home__navbar__left__search-input"
@@ -158,25 +165,31 @@
         name="todo-home__navbar__right__input"
         id="todo-home__navbar__right__input"
         class="todo-home__navbar__right__input"
+        v-model="darkModeChecked"
       />
       <label
+        @click="darkModeToggle"
         for="todo-home__navbar__right__input"
         class="todo-home__navbar__right__label"
       >
         <font-awesome-icon
+          v-show="darkModeChecked"
           class="todo-home__navbar__right__label__sun icons"
           :icon="['fa', 'sun']"
         />
         <font-awesome-icon
+          v-show="!darkModeChecked"
           class="todo-home__navbar__right__label__moon icons"
           :icon="['fa', 'moon']"
         />
       </label>
-      <div
+      <img
         data-toggle="modal"
         data-target="#profileModal"
         class="todo-home__navbar__right__profile"
-      ></div>
+        src="https://i.pravatar.cc/"
+        alt="avatar"
+      />
       <!-- profile Modal Start -->
       <div
         class="modal fade profileModal"
@@ -263,7 +276,14 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-
+let darkModeChecked = ref(true);
+const darkModeToggle = () => {
+  if (darkModeChecked.value) {
+    document.documentElement.setAttribute("data-theme", "darkMode");
+  } else {
+    document.documentElement.removeAttribute("data-theme", "darkMode");
+  }
+};
 let id = 0;
 const items = reactive([
   {
@@ -293,17 +313,25 @@ const items = reactive([
   grid-template-rows: 100%;
   position: relative;
   line-height: 70px;
+
   .icons {
     font-size: 20px;
     color: var(--sub-font-color);
+
+    @include pc {
+      font-size: 25px;
+    }
   }
   &__title {
     grid-column: 2/3;
-    font-size: 25px;
+    font-size: 35px;
     font-family: "Barlow";
     font-weight: 400;
     color: var(--sub-font-color);
     text-align: center;
+    @include pc {
+      font-size: 45px;
+    }
   }
   &__left {
     grid-column: 1/2;
@@ -321,13 +349,14 @@ const items = reactive([
       top: 100%;
       left: 0;
       z-index: 9;
-      height: 100%;
-      width: 35%;
-      min-height: 667px;
+      width: 25%;
+      min-width: 300px;
+      height: 100vh;
       background-color: var(--nav-bg-color);
       transform: scale(0, 1);
+      @include flex (column, space-between, unset);
+
       &__items {
-        // outline: 1px solid rebeccapurple;
         height: 100%;
         padding: 20px 0;
         @include flex(column, flex-start, center);
@@ -335,18 +364,36 @@ const items = reactive([
           width: 100%;
           height: 35px;
           line-height: 35px;
+          font-size: 20px;
+          @include pad {
+            font-size: 25px;
+            height: 45px;
+            line-height: 45px;
+          }
+          @include pc {
+            font-size: 30px;
+            height: 60px;
+            line-height: 60px;
+          }
           &:hover {
             background-color: var(--nav-hover-color);
             border-bottom: 1px solid var(--main-font-color);
           }
           a {
-            padding-left: 10px;
+            padding-left: 25%;
           }
         }
+      }
+      &__sign-out {
+        font-size: 30px;
+        padding-left: 25%;
       }
     }
     &__home {
       display: none;
+      @include pc {
+        display: block;
+      }
     }
     &__search-input {
       display: none;
@@ -360,7 +407,12 @@ const items = reactive([
       position: absolute;
       top: 100%;
       left: 10%;
-      width: 250px;
+      @include pc {
+        top: 25%;
+        left: 23%;
+      }
+      width: 90%;
+      max-width: 250px;
       height: 35px;
       background-color: #e4e0e0;
       border-radius: 5px;
@@ -374,27 +426,18 @@ const items = reactive([
   &__right {
     grid-column: 3/4;
     @include flex(row, space-around, center);
-    &__plus {
-    }
     &__input {
       display: none;
     }
-    &__label {
-      &__sun {
-        display: none;
-      }
-      &__moon {
-      }
-    }
     &__profile {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      border-radius: 4px;
       background-color: #fff;
     }
   }
 
-// Modals Start
+  // Modals Start
 
   // createTodoModal
   .createTodoModal {
@@ -430,7 +473,7 @@ const items = reactive([
   .profileModal {
     .modal-dialog {
       .modal-content {
-         font-size: 18px;
+        font-size: 18px;
         .modal-header {
           .modal-title {
             font-size: 30px;
@@ -438,8 +481,12 @@ const items = reactive([
         }
         .modal-body {
           &__form__content {
-            &__name, &__account, &__email, &__password, &__checked-password{
-              @include flex (column, center, flex-start);
+            &__name,
+            &__account,
+            &__email,
+            &__password,
+            &__checked-password {
+              @include flex(column, center, flex-start);
               gap: 0px;
             }
             input {
@@ -450,7 +497,7 @@ const items = reactive([
             }
             span {
               height: 35px;
-              line-height: 35px
+              line-height: 35px;
             }
           }
         }
@@ -487,6 +534,6 @@ const items = reactive([
     }
   }
 
-// Modals End
+  // Modals End
 }
 </style>
