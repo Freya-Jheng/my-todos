@@ -5,13 +5,17 @@
     </div>
     <div class="signUp__form">
       <h1 class="signUp__form__title">Sign Up</h1>
-      <form class="signUp__form__content">
+      <form
+      @submit.prevent.stop="handleSubmit" 
+      class="signUp__form__content">
         <div class="signUp__form__content__name">
           <span class="signUp__form__content__name__title"> 姓名 </span>
           <input
             type="text"
             class="signUp__form__content__name__input"
             placeholder="Enter your name"
+            required
+            v-model="name"
           />
         </div>
         <div class="signUp__form__content__account">
@@ -20,6 +24,8 @@
             type="text"
             class="signUp__form__content__account__input"
             placeholder="請輸入至少6位數"
+            required
+            v-model="account"
           />
         </div>
         <div class="signUp__form__content__email">
@@ -29,6 +35,7 @@
             class="signUp__form__content__email__input"
             placeholder="xxx@example.com"
             required
+            v-model="email"
           />
         </div>
         <div class="signUp__form__content__password">
@@ -37,6 +44,8 @@
             type="text"
             class="signUp__form__content__password__input"
             placeholder="請輸入至少8位數"
+            required
+            v-model="password"
           />
         </div>
         <div class="signUp__form__content__checked-password">
@@ -47,15 +56,17 @@
             type="text"
             class="signUp__form__content__checked-password__input"
             placeholder="請重新輸入密碼"
+            required
+            v-model="checkPassword"
           />
         </div>
         <div class="signUp__form__content__buttons">
-          <router-link
-            to="/my-todo/today"
+          <button
+            type="submit"
             class="signUp__form__content__buttons__siginIn"
           >
             Submit
-          </router-link>
+          </button>
           <router-link
             class="signUp__form__content__buttons__siginUp"
             to="/signin"
@@ -67,6 +78,63 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import authorizationAPI from "@/apis/authorization";
+import { ref, reactive } from "vue";
+import {useRoute, useRouter} from 'vue-router'
+
+const account = ref("");
+const name = ref("");
+const password = ref("");
+const checkPassword = ref("");
+const email = ref("");
+const router = useRouter();
+const route = useRoute();
+
+async function handleSubmit() {
+  try {
+    // input empty inform
+    if (!account.value.trim() || !name.value.trim() || !password.value.trim() || !email.value.trim() || !checkPassword.value.trim()) {
+      alert("Please complete your form!");
+      return;
+    }
+
+    // check password and checked password
+    if(password.value !== checkPassword.value) {
+      alert('Password and CheckedPassword are not the same !')
+      return
+    }
+
+    if(password.value.length < 8) {
+      alert('Password and CheckedPassword need to be at least 8 words !')
+      return
+    }
+
+    if(account.value.length < 6) {
+      alert('Account needs to be at least 6 words!')
+      return
+    }
+
+    const response = await authorizationAPI.signUp({
+      account: account.value,
+      name: name.value,
+      password: password.value,
+      email: email.value,
+      checkPassword: checkPassword.value
+    });
+
+    console.log(response)
+    alert('Submit Successfully')
+    router.push({name: 'sign-in'})
+
+  } catch (error) {
+    console.log(error)
+    alert('Your input did not meet the expectation!')
+  }
+}
+</script>
+
 
 <style scoped lang="scss">
 @import "@/styles/mixins.scss";
@@ -183,7 +251,7 @@
             font-size: 25px;
             font-weight: 400;
             height: 50px;
-          line-height: 50px;
+            line-height: 50px;
           }
         }
       }

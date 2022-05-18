@@ -5,30 +5,31 @@
     </div>
     <div class="signIn__form">
       <h1 class="signIn__form__title">Sign In</h1>
-      <form class="signIn__form__content">
+      <form @submit.prevent.stop="handleSubmit" class="signIn__form__content">
         <div class="signIn__form__content__account">
           <span class="signIn__form__content__account__title"> 帳號 </span>
           <input
+            v-model="account"
             type="text"
             class="signIn__form__content__account__input"
-            placeholder="xxx@example.com"
+            placeholder="xxxxxx"
+            required
           />
         </div>
         <div class="signIn__form__content__password">
           <span class="signIn__form__content__password__title"> 密碼 </span>
           <input
+            v-model="password"
             type="text"
             class="signIn__form__content__password__input"
             placeholder="xxxxxxxx"
+            required
           />
         </div>
         <div class="signIn__form__content__buttons">
-          <router-link
-            to="/my-todo/today"
-            class="signIn__form__content__buttons__siginIn"
-          >
+          <button type="submit" class="signIn__form__content__buttons__siginIn">
             Sign in
-          </router-link>
+          </button>
           <router-link
             class="signIn__form__content__buttons__siginUp"
             to="/signup"
@@ -40,6 +41,37 @@
     </div>
   </div>
 </template>
+<script setup>
+import { ref, reactive } from "vue";
+import authorizationAPI from "@/apis/authorization";
+import {useRouter, useRoute} from 'vue-router';
+const account = ref("");
+const password = ref("");
+const router = useRouter();
+const route = useRoute();
+
+async function handleSubmit () {
+  try {
+    if(!account.value.trim() || !password.value.trim()) {
+      alert('Please type in your inform')
+      return
+    }
+    const response = await authorizationAPI.signIn({
+      account: account.value,
+      password: password.value
+    })
+
+    console.log(response)
+    router.push({name: 'my-todo-today'})
+
+  } catch(error) {
+    alert('Wrong account or password!')
+    console.log(error)
+  }
+}
+</script>
+
+
 
 <style scoped lang="scss">
 @import "@/styles/mixins.scss";

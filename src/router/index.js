@@ -19,18 +19,22 @@ const router = createRouter({
       children: [
         {
           path: '/my-todo/today',
+          name: 'my-todo-today',
           component: () => import('../views/TodayList.vue')
         },
         {
           path: '/my-todo/upcoming',
+          name: 'my-todo-upcoming',
           component: () => import('../views/UpcomingList.vue')
-        },
+        },    
         {
           path: '/my-todo/life',
+          name: 'my-todo-life',
           component: () => import('../views/LifeCategory.vue')
         },
         {
           path: '/my-todo/work',
+          name: 'my-todo-work',
           component: () => import('../views/WorkCategory.vue')
         },
       ]

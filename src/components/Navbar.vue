@@ -39,8 +39,9 @@
           <option value="Study">Study</option>
         </select> -->
         <router-link
-        to="/signin"
-         class="todo-home__navbar__left__nav__sign-out">
+          to="/signin"
+          class="todo-home__navbar__left__nav__sign-out"
+        >
           <font-awesome-icon
             class="todo-home__navbar__left__nav__sign-out-icon"
             :icon="['fa', 'arrow-right-from-bracket']"
@@ -354,7 +355,7 @@ const items = reactive([
       height: 100vh;
       background-color: var(--nav-bg-color);
       transform: scale(0, 1);
-      @include flex (column, space-between, unset);
+      @include flex(column, space-between, unset);
 
       &__items {
         height: 100%;
