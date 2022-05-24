@@ -8,14 +8,15 @@ $grey-FA: #FAFAFA;
 $grey-EE: #EEEEEE;
 $grey-E4: #e4e0e0;
 $white-E2: #e2dcdc;
-
-
+$grey-9E: #9e9999;
+// $orange-f3: #fa4008e1;
 :root {
   --banner-bg-color: #{$tuna};
   --nav-bg-color: #{$grey-FA};
   --nav-hover-color: #{$grey-EE};
   --input-bg-color: #{$grey-E4};
-
+  --create-todo-font: #{$grey-9E};
+  --create-todo-focus: #{$tuna};
   --main-bg-color: #{$white};
   --main-font-color: #{$black-2a};
   --sub-font-color: #{$white};

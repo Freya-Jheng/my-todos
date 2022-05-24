@@ -31,13 +31,6 @@
             </router-link>
           </li>
         </ul>
-        <!-- <select name="" id="">
-          <option value="Categories">Categories</option>
-          <option value="Life">Life</option>
-          <option value="Job">Job</option>
-          <option value="Travel">Travel</option>
-          <option value="Study">Study</option>
-        </select> -->
         <router-link
           to="/signin"
           class="todo-home__navbar__left__nav__sign-out"
@@ -111,10 +104,9 @@
                   placeholder="Description"
                   name="Description"
                   id=""
-                  rows="1"
+                  rows="3"
                   cols="1"
-                >
-                </textarea>
+                ></textarea>
                 <!-- <div class="modal-body__form__tags">
                   <button class="modal-body__form__tags__today">Today</button>
                   <button class="modal-body__form__tags__upcoming">

@@ -20,7 +20,7 @@
           <span class="signIn__form__content__password__title"> 密碼 </span>
           <input
             v-model="password"
-            type="text"
+            type="password"
             class="signIn__form__content__password__input"
             placeholder="xxxxxxxx"
             required
