@@ -60,8 +60,8 @@ async function handleSubmit () {
       account: account.value,
       password: password.value
     })
+    localStorage.setItem('token',response.data.data.token)
 
-    console.log(response)
     router.push({name: 'my-todo-today'})
 
   } catch(error) {
