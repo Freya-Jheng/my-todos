@@ -9,7 +9,7 @@ npm run build
 cd dist
 git init
 git checkout -b main
-# git branch -A main
+git branch -A main
 
 git add -A
 git commit -m 'deploy'
