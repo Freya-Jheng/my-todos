@@ -4,21 +4,21 @@
     <div class="todo-home__content-list__today__todos">
       <div class="todo-home__content-list__today__todos__created-todos">
         <!-- render todos here -->
-          <form
-          v-for="item in todayLists"
-          :key="item.id" 
+        <form v-for="item in todayLists" :key="item.id"
           class="todo-home__content-list__today__todos__created-todos__created-box">
-            <button type="submit"
-              class="todo-home__content-list__today__todos__created-todos__created-box__deleted"></button>
-            <div class="todo-home__content-list__today__todos__created-todos__created-box__content">
-              <span class="todo-home__content-list__today__todos__created-todos__created-box__content__name">
-               {{item.name}}
-              </span>
-              <span class="todo-home__content-list__today__todos__created-todos__created-box__content__description">
-                 {{item.name}}
-              </span>
-            </div>
-          </form>
+          <div @click.prevent.stop="deletedTodos(item.id)"
+            class="todo-home__content-list__today__todos__created-todos__created-box__deleted"></div>
+          <div class="todo-home__content-list__today__todos__created-todos__created-box__content">
+            <span class="todo-home__content-list__today__todos__created-todos__created-box__content__name">
+              {{ item.name }}
+            </span>
+            <span class="todo-home__content-list__today__todos__created-todos__created-box__content__description">
+              {{ item.description }}
+            </span>
+          </div>
+          <font-awesome-icon class="todo-home__content-list__today__todos__created-todos__created-box__edit"
+            :icon="['fa', 'pen-to-square']" />
+        </form>
         <!-- render todos here -->
       </div>
       <div class="todo-home__content-list__today__todos__create-todos">
@@ -29,12 +29,11 @@
           <div class="plus-icon">+</div>
           <span class="plus-title">Add todo</span>
         </label>
-        <form v-show="!checkbox" class="todo-home__content-list__today__todos__create-todos__create-box">
+        <form @submit.prevent.stop="createTodos" v-show="!checkbox"
+          class="todo-home__content-list__today__todos__create-todos__create-box">
           <div class="todo-home__content-list__today__todos__create-todos__create-box__inputs">
-            <input
-            v-model="taskName" 
-            type="text" class="name" placeholder="Task">
-            <textarea wrap="hard" placeholder="Descriptioin" rows="7"></textarea>
+            <input v-model="taskName" type="text" class="name" placeholder="Task">
+            <textarea v-model="taskDescription" wrap="hard" placeholder="Descriptioin" rows="7"></textarea>
           </div>
           <div class="todo-home__content-list__today__todos__create-todos__create-box__buttons">
             <button type="submit">Add todo</button>
@@ -49,19 +48,23 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, watch } from 'vue'
 import listAPI from '@/apis/list.js'
+
 
 const checkbox = ref(true)
 const todayLists = ref([])
 const taskName = ref('')
-// const taskDescription = ref('')
+const taskDescription = ref('')
 
 async function getTodos() {
   try {
     const response = await listAPI.getTodos()
-    todayLists.value = response.data.lists 
-    return todayLists
+    if (response.statusText !== 'OK') {
+      throw new Error(response.statusText)
+    }
+  
+    todayLists.value = response.data.lists
   } catch (error) {
     console.log(error)
     alert('Cannot get todos from API!')
@@ -69,16 +72,35 @@ async function getTodos() {
 }
 async function createTodos() {
   try {
+    if (taskName.value.trim().length === 0) {
+      return alert('Please type in valid words')
+    }
     const response = await listAPI.createTodos({
-      name: taskName.value
-    }) 
+      name: taskName.value,
+      description: taskDescription.value
+    })
+    todayLists.value.push(response.data.list)
+    taskName.value = ''
+    taskDescription.value = ''
+  } catch (error) {
+    console.log(error)
+    alert('Cannot create todos from api!')
+  }
+}
+async function deletedTodos(todoId) {
+  try {
+    const response = await listAPI.deleteTodos({ todoId })
+    if (response.status !== 200) {
+      throw new Error(response.statusText)
+    }
+    todayLists.value = todayLists.value.filter(list => list.id !== todoId)
 
   } catch (error) {
-
+    console.log(error)
+    alert('Cannot delete todos from api!!')
   }
 }
 
-// export from setup lifecircle
 getTodos()
 
 </script>
@@ -110,18 +132,23 @@ getTodos()
         height: 65px;
         display: flex;
         flex-direction: row;
+        justify-content: space-around;
         align-items: center;
         padding-left: 10px;
-        gap: 30px;
+        gap: 20px;
         border-bottom: 1px solid var(--input-bg-color);
-
+        color: var(--create-todo-font);
+        &:hover {
+          color: var(--main-font-color);
+          border-bottom: 1px solid var(--main-font-color);
+        }
         &__deleted {
           width: 30px;
           height: 30px;
           border: 2px solid var(--input-bg-color);
           border-radius: 50%;
           position: relative;
-
+          cursor: pointer;
           &:hover {
             &::after {
               content: '\2713';
@@ -135,17 +162,18 @@ getTodos()
             border: 2px solid var(--create-todo-font);
           }
         }
-
         &__content {
           display: flex;
           flex-direction: column;
           gap: 13px;
-          width: 100%;
-          color: var(--create-todo-font);
+          width: 90%;
 
           &__description {
             font-size: 15px;
           }
+        }
+        &__edit {
+         cursor: pointer;
         }
       }
     }

@@ -124,7 +124,6 @@ async function handleSubmit() {
       checkPassword: checkPassword.value
     });
 
-    console.log(response)
     alert('Submit Successfully')
     router.push({name: 'sign-in'})
 

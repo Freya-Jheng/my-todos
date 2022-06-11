@@ -1,92 +1,43 @@
 <template>
   <div class="todo-home__navbar">
     <div class="todo-home__navbar__left">
-      <input
-        type="checkbox"
-        name="todo-home__navbar__left__input"
-        id="todo-home__navbar__left__input"
-        class="todo-home__navbar__left__input"
-      />
-      <label
-        for="todo-home__navbar__left__input"
-        class="todo-home__navbar__left__label"
-      >
-        <font-awesome-icon
-          class="todo-home__navbar__left__label__bars icons"
-          :icon="['fa', 'bars']"
-        />
+      <input type="checkbox" name="todo-home__navbar__left__input" id="todo-home__navbar__left__input"
+        class="todo-home__navbar__left__input" />
+      <label for="todo-home__navbar__left__input" class="todo-home__navbar__left__label">
+        <font-awesome-icon class="todo-home__navbar__left__label__bars icons" :icon="['fa', 'bars']" />
       </label>
       <nav class="todo-home__navbar__left__nav">
         <ul class="todo-home__navbar__left__nav__items">
-          <li
-            v-for="item in items"
-            :key="item.id"
-            class="todo-home__navbar__left__nav__items__item"
-          >
-            <router-link
-              :to="item.path"
-              class="todo-home__navbar__left__nav__items__item-link"
-            >
+          <li v-for="item in items" :key="item.id" class="todo-home__navbar__left__nav__items__item">
+            <router-link :to="item.path" class="todo-home__navbar__left__nav__items__item-link">
               {{ item.title }}
             </router-link>
           </li>
         </ul>
-        <router-link
-          to="/signin"
-          class="todo-home__navbar__left__nav__sign-out"
-        >
-          <font-awesome-icon
-            class="todo-home__navbar__left__nav__sign-out-icon"
-            :icon="['fa', 'arrow-right-from-bracket']"
-          />
+        <router-link to="/signin" class="todo-home__navbar__left__nav__sign-out">
+          <font-awesome-icon class="todo-home__navbar__left__nav__sign-out-icon"
+            :icon="['fa', 'arrow-right-from-bracket']" />
         </router-link>
       </nav>
       <router-link to="/my-todo/today" class="todo-home__navbar__left__home">
         <font-awesome-icon class="home-icon icons" :icon="['fa', 'home']" />
       </router-link>
-      <input
-        type="checkbox"
-        class="todo-home__navbar__left__search-input"
-        name="todo-home__navbar__left__search-input"
-        id="todo-home__navbar__left__search-input"
-      />
-      <label
-        class="todo-home__navbar__left__search-label"
-        for="todo-home__navbar__left__search-input"
-      >
-        <font-awesome-icon
-          class="todo-home__navbar__left__search-label-icon icons"
-          :icon="['fa', 'magnifying-glass']"
-        />
+      <input type="checkbox" class="todo-home__navbar__left__search-input" name="todo-home__navbar__left__search-input"
+        id="todo-home__navbar__left__search-input" />
+      <label class="todo-home__navbar__left__search-label" for="todo-home__navbar__left__search-input">
+        <font-awesome-icon class="todo-home__navbar__left__search-label-icon icons"
+          :icon="['fa', 'magnifying-glass']" />
       </label>
-      <input
-        class="todo-home__navbar__left__search-bar"
-        type="text"
-        placeholder="搜尋..."
-      />
+      <input class="todo-home__navbar__left__search-bar" type="text" placeholder="搜尋..." />
     </div>
-    <router-link to="/my-todo/today" class="todo-home__navbar__title"
-      >My Todo</router-link
-    >
+    <router-link to="/my-todo/today" class="todo-home__navbar__title">My Todo</router-link>
     <div class="todo-home__navbar__right">
-      <div
-        class="todo-home__navbar__right__plus"
-        data-toggle="modal"
-        data-target="#createTodoModal"
-      >
-        <font-awesome-icon
-          class="todo-home__navbar__right__plus__plus-icon icons"
-          :icon="['fa', 'plus']"
-        />
+      <div class="todo-home__navbar__right__plus" data-toggle="modal" data-target="#createTodoModal">
+        <font-awesome-icon class="todo-home__navbar__right__plus__plus-icon icons" :icon="['fa', 'plus']" />
       </div>
       <!-- createTodoModal Start -->
-      <div
-        class="modal fade createTodoModal"
-        id="createTodoModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade createTodoModal" id="createTodoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -94,19 +45,9 @@
             </div>
             <div class="modal-body">
               <form class="modal-body__form">
-                <input
-                  type="text"
-                  class="modal-body__form__task"
-                  placeholder="Task"
-                />
-                <textarea
-                  class="modal-body__form__description"
-                  placeholder="Description"
-                  name="Description"
-                  id=""
-                  rows="3"
-                  cols="1"
-                ></textarea>
+                <input v-model="taskName" type="text" class="modal-body__form__task" placeholder="Task" />
+                <textarea v-model="taskDescription" class="modal-body__form__description" placeholder="Description"
+                  name="Description" id="" rows="3" cols="1"></textarea>
                 <!-- <div class="modal-body__form__tags">
                   <button class="modal-body__form__tags__today">Today</button>
                   <button class="modal-body__form__tags__upcoming">
@@ -144,7 +85,8 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn save">Save</button>
+              <button @click.prevent.stop="createTodos" data-dismiss="modal" type="button"
+                class="btn save">Save</button>
               <button type="button" class="btn cancel" data-dismiss="modal">
                 Cancel
               </button>
@@ -153,44 +95,19 @@
         </div>
       </div>
       <!-- createTodoModal End -->
-      <input
-        type="checkbox"
-        name="todo-home__navbar__right__input"
-        id="todo-home__navbar__right__input"
-        class="todo-home__navbar__right__input"
-        v-model="darkModeChecked"
-      />
-      <label
-        @click="darkModeToggle"
-        for="todo-home__navbar__right__input"
-        class="todo-home__navbar__right__label"
-      >
-        <font-awesome-icon
-          v-show="darkModeChecked"
-          class="todo-home__navbar__right__label__sun icons"
-          :icon="['fa', 'sun']"
-        />
-        <font-awesome-icon
-          v-show="!darkModeChecked"
-          class="todo-home__navbar__right__label__moon icons"
-          :icon="['fa', 'moon']"
-        />
+      <input type="checkbox" name="todo-home__navbar__right__input" id="todo-home__navbar__right__input"
+        class="todo-home__navbar__right__input" v-model="darkModeChecked" />
+      <label @click="darkModeToggle" for="todo-home__navbar__right__input" class="todo-home__navbar__right__label">
+        <font-awesome-icon v-show="darkModeChecked" class="todo-home__navbar__right__label__sun icons"
+          :icon="['fa', 'sun']" />
+        <font-awesome-icon v-show="!darkModeChecked" class="todo-home__navbar__right__label__moon icons"
+          :icon="['fa', 'moon']" />
       </label>
-      <img
-        data-toggle="modal"
-        data-target="#profileModal"
-        class="todo-home__navbar__right__profile"
-        src="https://i.pravatar.cc/"
-        alt="avatar"
-      />
+      <img data-toggle="modal" data-target="#profileModal" class="todo-home__navbar__right__profile"
+        src="https://i.pravatar.cc/" alt="avatar" />
       <!-- profile Modal Start -->
-      <div
-        class="modal fade profileModal"
-        id="profileModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade profileModal" id="profileModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -202,54 +119,32 @@
                   <span class="modal-body__form__content__name__title">
                     姓名
                   </span>
-                  <input
-                    type="text"
-                    class="modal-body__form__content__name__input"
-                    placeholder="Enter your name"
-                  />
+                  <input type="text" class="modal-body__form__content__name__input" placeholder="Enter your name" />
                 </div>
                 <div class="modal-body__form__content__account">
                   <span class="modal-body__form__content__account__title">
                     帳號
                   </span>
-                  <input
-                    type="text"
-                    class="modal-body__form__content__account__input"
-                    placeholder="請輸入至少6位數"
-                  />
+                  <input type="text" class="modal-body__form__content__account__input" placeholder="請輸入至少6位數" />
                 </div>
                 <div class="modal-body__form__content__email">
                   <span class="modal-body__form__content__email__title">
                     信箱
                   </span>
-                  <input
-                    type="email"
-                    class="modal-body__form__content__email__input"
-                    placeholder="xxx@example.com"
-                    required
-                  />
+                  <input type="email" class="modal-body__form__content__email__input" placeholder="xxx@example.com"
+                    required />
                 </div>
                 <div class="modal-body__form__content__password">
                   <span class="modal-body__form__content__password__title">
                     密碼
                   </span>
-                  <input
-                    type="text"
-                    class="modal-body__form__content__password__input"
-                    placeholder="請輸入至少8位數"
-                  />
+                  <input type="text" class="modal-body__form__content__password__input" placeholder="請輸入至少8位數" />
                 </div>
                 <div class="modal-body__form__content__checked-password">
-                  <span
-                    class="modal-body__form__content__checked-password__title"
-                  >
+                  <span class="modal-body__form__content__checked-password__title">
                     確認密碼
                   </span>
-                  <input
-                    type="text"
-                    class="modal-body__form__content__checked-password__input"
-                    placeholder="請重新輸入密碼"
-                  />
+                  <input type="text" class="modal-body__form__content__checked-password__input" placeholder="請重新輸入密碼" />
                 </div>
               </form>
             </div>
@@ -269,15 +164,13 @@
 
 <script setup>
 import { ref, reactive } from "vue";
+import listAPI from '@/apis/list.js'
+
+const taskName = ref('')
+const taskDescription = ref('')
 let darkModeChecked = ref(true);
-const darkModeToggle = () => {
-  if (darkModeChecked.value) {
-    document.documentElement.setAttribute("data-theme", "darkMode");
-  } else {
-    document.documentElement.removeAttribute("data-theme", "darkMode");
-  }
-};
 let id = 0;
+const todayLists = ref([])
 const items = reactive([
   {
     id: id++,
@@ -290,6 +183,51 @@ const items = reactive([
     path: "/my-todo/upcoming",
   },
 ]);
+
+// function
+const darkModeToggle = () => {
+  if (darkModeChecked.value) {
+    document.documentElement.setAttribute("data-theme", "darkMode");
+  } else {
+    document.documentElement.removeAttribute("data-theme", "darkMode");
+  }
+};
+async function getTodos() {
+  try {
+    const response = await listAPI.getTodos()
+    if (response.statusText !== 'OK') {
+      throw new Error(response.statusText)
+    }
+
+    todayLists.value = response.data.lists
+  } catch (error) {
+    console.log(error)
+    alert('Cannot get todos from API!')
+  }
+}
+
+async function createTodos() {
+  try {
+    if (taskName.value.trim().length === 0) {
+      return alert('Please type in valid words')
+    }
+    const response = await listAPI.createTodos({
+      name: taskName.value,
+      description: taskDescription.value
+    })
+
+    if(response.status !== 200) {
+      throw new Error (response.statusText)
+    }
+    todayLists.value.push(response.data.list)
+    taskName.value = ''
+    taskDescription.value = ''
+  } catch (error) {
+    console.log(error)
+    alert('Cannot create todos from api!')
+  }
+}
+getTodos()
 </script>
 
 <style scoped lang="scss">
@@ -315,6 +253,7 @@ const items = reactive([
       font-size: 25px;
     }
   }
+
   &__title {
     grid-column: 2/3;
     font-size: 35px;
@@ -322,21 +261,26 @@ const items = reactive([
     font-weight: 400;
     color: var(--sub-font-color);
     text-align: center;
+
     @include pc {
       font-size: 45px;
     }
   }
+
   &__left {
     grid-column: 1/2;
     @include flex(row, space-around, center);
+
     &__input {
       display: none;
-      &:checked ~ nav {
+
+      &:checked~nav {
         transform: scale(1, 1);
         transform-origin: left;
         transition: transform 0.18s;
       }
     }
+
     &__nav {
       position: absolute;
       top: 100%;
@@ -353,57 +297,70 @@ const items = reactive([
         height: 100%;
         padding: 20px 0;
         @include flex(column, flex-start, center);
+
         &__item {
           width: 100%;
           height: 35px;
           line-height: 35px;
           font-size: 20px;
+
           @include pad {
             font-size: 25px;
             height: 45px;
             line-height: 45px;
           }
+
           @include pc {
             font-size: 30px;
             height: 60px;
             line-height: 60px;
           }
+
           &:hover {
             background-color: var(--nav-hover-color);
             border-bottom: 1px solid var(--main-font-color);
           }
+
           a {
             padding-left: 25%;
           }
         }
       }
+
       &__sign-out {
         font-size: 30px;
         padding-left: 25%;
       }
     }
+
     &__home {
       display: none;
+
       @include pc {
         display: block;
       }
     }
+
     &__search-input {
       display: none;
-      &:checked ~ .todo-home__navbar__left__search-bar {
+
+      &:checked~.todo-home__navbar__left__search-bar {
         transform: scale(1, 1);
         transform-origin: left;
         transition: transform 0.1s;
       }
     }
+
     &__search-bar {
       position: absolute;
       top: 100%;
       left: 10%;
+
       @include pc {
         top: 25%;
         left: 23%;
       }
+
       width: 90%;
       max-width: 250px;
       height: 35px;
@@ -411,17 +368,21 @@ const items = reactive([
       border-radius: 5px;
       transform: scale(0, 1);
       padding-left: 10px;
+
       &:focus {
         border: 1px solid #bbb8b8;
       }
     }
   }
+
   &__right {
     grid-column: 3/4;
     @include flex(row, space-around, center);
+
     &__input {
       display: none;
     }
+
     &__profile {
       width: 50px;
       height: 50px;
@@ -437,20 +398,24 @@ const items = reactive([
     .modal-dialog {
       .modal-content {
         font-size: 18px;
+
         .modal-header {
           .modal-title {
             font-size: 30px;
           }
         }
+
         .modal-body {
           &__form {
             width: 100%;
+
             &__task {
               width: 95%;
               height: 50px;
               background-color: var(--input-bg-color);
               padding-left: 10px;
             }
+
             &__description {
               width: 97.5%;
               padding-left: 10px;
@@ -467,13 +432,16 @@ const items = reactive([
     .modal-dialog {
       .modal-content {
         font-size: 18px;
+
         .modal-header {
           .modal-title {
             font-size: 30px;
           }
         }
+
         .modal-body {
           &__form__content {
+
             &__name,
             &__account,
             &__email,
@@ -482,12 +450,14 @@ const items = reactive([
               @include flex(column, center, flex-start);
               gap: 0px;
             }
+
             input {
               width: 95%;
               height: 35px;
               background-color: var(--input-bg-color);
               padding-left: 10px;
             }
+
             span {
               height: 35px;
               line-height: 35px;
@@ -501,6 +471,7 @@ const items = reactive([
   // modalFooter
   .modal-footer {
     color: var(--sub-font-color);
+
     .cancel,
     .save {
       all: unset;
@@ -511,16 +482,20 @@ const items = reactive([
       cursor: pointer;
       text-align: center;
     }
+
     .cancel {
       background-color: var(--form-border);
       opacity: 0.5;
+
       &:focus {
         opacity: 1;
       }
     }
+
     .save {
       background-color: var(--banner-bg-color);
       opacity: 0.5;
+
       &:focus {
         opacity: 1;
       }
