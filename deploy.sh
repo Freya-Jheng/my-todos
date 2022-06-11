@@ -13,6 +13,6 @@ git branch -A main
 
 git add -A
 git commit -m 'deploy'
-git push -f https://github.com/Freya-Jheng/my-todos-vue.git main:gh-pages
+git push -f https://github.com/Freya-Jheng/my-todos.git main:gh-pages
 
 cd -
