@@ -48,9 +48,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import listAPI from '@/apis/list.js'
-
 
 const checkbox = ref(true)
 const todayLists = ref([])
@@ -108,6 +107,7 @@ getTodos()
 <style scoped lang="scss">
 .todo-home__content-list__today {
   width: 65%;
+  min-width: 375px;
   height: 100vh;
   margin: 60px auto 0;
   padding: 15px;

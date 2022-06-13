@@ -85,7 +85,7 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button @click.prevent.stop="createTodos" data-dismiss="modal" type="button"
+              <button @click.prevent="createTodos" data-dismiss="modal" type="button"
                 class="btn save">Save</button>
               <button type="button" class="btn cancel" data-dismiss="modal">
                 Cancel
@@ -183,6 +183,7 @@ const items = reactive([
     path: "/my-todo/upcoming",
   },
 ]);
+
 
 // function
 const darkModeToggle = () => {

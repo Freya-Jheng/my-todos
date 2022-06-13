@@ -1,7 +1,7 @@
 # Todo-List-Vue
 
 This template should help get you started developing with Vue 3 in Vite.
-Click [My Todo](https://freya-jheng.github.io/my-todos-vue/) to view the website.
+Click [My Todo](https://freya-jheng.github.io/my-todos/) to view the website.
 
 ## Recommended IDE Setup
 
