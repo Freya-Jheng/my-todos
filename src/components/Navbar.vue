@@ -247,13 +247,9 @@ getTodos()
   line-height: 70px;
 
   .icons {
-    font-size: 10px;
+    font-size: 20px;
     color: var(--sub-font-color);
     cursor: pointer;
-
-    @include pc {
-      font-size: 20px;
-    }
   }
 
   &__title {
