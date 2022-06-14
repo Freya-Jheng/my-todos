@@ -247,24 +247,25 @@ getTodos()
   line-height: 70px;
 
   .icons {
-    font-size: 20px;
+    font-size: 10px;
     color: var(--sub-font-color);
+    cursor: pointer;
 
     @include pc {
-      font-size: 25px;
+      font-size: 20px;
     }
   }
 
   &__title {
     grid-column: 2/3;
-    font-size: 35px;
+    font-size: 30px;
     font-family: "Barlow";
     font-weight: 400;
     color: var(--sub-font-color);
     text-align: center;
 
     @include pc {
-      font-size: 45px;
+      font-size: 35px;
     }
   }
 
@@ -274,7 +275,6 @@ getTodos()
 
     &__input {
       display: none;
-
       &:checked~nav {
         transform: scale(1, 1);
         transform-origin: left;
@@ -287,8 +287,8 @@ getTodos()
       top: 100%;
       left: 0;
       z-index: 9;
-      width: 25%;
-      min-width: 300px;
+      width: 10%;
+      min-width: 250px;
       height: 100vh;
       background-color: var(--nav-bg-color);
       transform: scale(0, 1);
@@ -301,9 +301,10 @@ getTodos()
 
         &__item {
           width: 100%;
-          height: 35px;
+          height: 30px;
           line-height: 35px;
           font-size: 20px;
+          cursor: pointer;
 
           @include pad {
             font-size: 25px;
@@ -312,7 +313,7 @@ getTodos()
           }
 
           @include pc {
-            font-size: 30px;
+            font-size: 20px;
             height: 60px;
             line-height: 60px;
           }
@@ -389,6 +390,7 @@ getTodos()
       height: 50px;
       border-radius: 4px;
       background-color: #fff;
+      cursor: pointer;
     }
   }
 

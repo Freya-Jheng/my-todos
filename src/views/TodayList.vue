@@ -27,7 +27,7 @@
         <label v-show="checkbox" class="todo-home__content-list__today__todos__create-todos__label"
           for="add-todo-input">
           <div class="plus-icon">+</div>
-          <span class="plus-title">Add todo</span>
+          <button class="plus-title" type="button">Add todo</button>
         </label>
         <form @submit.prevent.stop="createTodos" v-show="!checkbox"
           class="todo-home__content-list__today__todos__create-todos__create-box">
@@ -36,7 +36,7 @@
             <textarea v-model="taskDescription" wrap="hard" placeholder="Descriptioin" rows="7"></textarea>
           </div>
           <div class="todo-home__content-list__today__todos__create-todos__create-box__buttons">
-            <button type="submit">Add todo</button>
+            <button class="add-todos" type="submit" :disabled="!taskName">Add todo</button>
             <label for="add-todo-input">
               <div>Cancel</div>
             </label>
@@ -72,7 +72,7 @@ async function getTodos() {
 async function createTodos() {
   try {
     if (taskName.value.trim().length === 0) {
-      return alert('Please type in valid words')
+      return
     }
     const response = await listAPI.createTodos({
       name: taskName.value,
@@ -252,7 +252,6 @@ getTodos()
             text-align: center;
             line-height: 35px;
             opacity: 0.3;
-
             &:hover,
             &:focus {
               opacity: 1;
@@ -262,6 +261,9 @@ getTodos()
           button {
             background-color: var(--create-todo-focus);
             color: var(--sub-font-color);
+            &:disabled {
+              opacity: 0.3;
+            }
           }
 
           label {
