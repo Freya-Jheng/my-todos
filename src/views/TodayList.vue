@@ -4,21 +4,41 @@
     <div class="todo-home__content-list__today__todos">
       <div class="todo-home__content-list__today__todos__created-todos">
         <!-- render todos here -->
-        <form v-for="item in todayLists" :key="item.id"
+        <div v-for="item in todayLists" :key="item.id"
           class="todo-home__content-list__today__todos__created-todos__created-box">
-          <div @click.prevent.stop="deletedTodos(item.id)"
-            class="todo-home__content-list__today__todos__created-todos__created-box__deleted"></div>
-          <div class="todo-home__content-list__today__todos__created-todos__created-box__content">
-            <span class="todo-home__content-list__today__todos__created-todos__created-box__content__name">
-              {{ item.name }}
-            </span>
-            <span class="todo-home__content-list__today__todos__created-todos__created-box__content__description">
-              {{ item.description }}
-            </span>
+          <div 
+            class="todo-home__content-list__today__todos__created-todos__created-box__edited">
+            <div @click.prevent.stop="deletedTodos(item.id)"
+              class="todo-home__content-list__today__todos__created-todos__created-box__edited__deleted"></div>
+            <div class="todo-home__content-list__today__todos__created-todos__created-box__edited__content">
+              <span class="todo-home__content-list__today__todos__created-todos__created-box__edited__content__name">
+                {{ item.name }}
+              </span>
+              <span
+                class="todo-home__content-list__today__todos__created-todos__created-box__edited__content__description">
+                {{ item.description }}
+              </span>
+            </div>
+            <font-awesome-icon @click.prevent.stop="editCurrentTodo(item)"
+              class="todo-home__content-list__today__todos__created-todos__created-box__edited__edit"
+              :icon="['fa', 'pen-to-square']" />
           </div>
-          <font-awesome-icon class="todo-home__content-list__today__todos__created-todos__created-box__edit"
-            :icon="['fa', 'pen-to-square']" />
-        </form>
+          <form 
+            v-if="item.id === currentTodo.id"
+            v-show="editingStatus"
+            class="todo-home__content-list__today__todos__create-todos__create-box">
+            <div class="todo-home__content-list__today__todos__create-todos__create-box__inputs">
+              <input v-model="currentTodo.name" type="text" class="name" placeholder="Task">
+              <textarea v-model="currentTodo.description" wrap="hard" placeholder="Descriptioin" rows="7"></textarea>
+            </div>
+            <div class="todo-home__content-list__today__todos__create-todos__create-box__buttons">
+              <button class="add-todos" type="submit">Save</button>
+              <label>
+                <div @click="editingStatus=false">Cancel</div>
+              </label>
+            </div>
+          </form>
+        </div>
         <!-- render todos here -->
       </div>
       <div class="todo-home__content-list__today__todos__create-todos">
@@ -48,13 +68,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import listAPI from '@/apis/list.js'
 
 const checkbox = ref(true)
 const todayLists = ref([])
 const taskName = ref('')
 const taskDescription = ref('')
+const currentTodo = ref({})
+const editingStatus = ref(false)
 
 async function getTodos() {
   try {
@@ -62,7 +84,7 @@ async function getTodos() {
     if (response.statusText !== 'OK') {
       throw new Error(response.statusText)
     }
-  
+
     todayLists.value = response.data.lists
   } catch (error) {
     console.log(error)
@@ -99,7 +121,10 @@ async function deletedTodos(todoId) {
     alert('Cannot delete todos from api!!')
   }
 }
-
+const editCurrentTodo = (todo) => {
+  currentTodo.value = {...todo}
+  editingStatus.value = true
+}
 getTodos()
 
 </script>
@@ -129,51 +154,61 @@ getTodos()
 
       &__created-box {
         width: 100%;
-        height: 65px;
         display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        padding-left: 10px;
-        gap: 20px;
-        border-bottom: 1px solid var(--input-bg-color);
-        color: var(--create-todo-font);
-        &:hover {
-          color: var(--main-font-color);
-          border-bottom: 1px solid var(--main-font-color);
-        }
-        &__deleted {
-          width: 30px;
-          height: 30px;
-          border: 2px solid var(--input-bg-color);
-          border-radius: 50%;
-          position: relative;
-          cursor: pointer;
-          &:hover {
-            &::after {
-              content: '\2713';
-              position: absolute;
-              top: 50%;
-              right: 50%;
-              transform: translate(50%, -50%);
-              font-size: 23px;
-            }
-
-            border: 2px solid var(--create-todo-font);
-          }
-        }
-        &__content {
+        flex-direction: column;
+        &__edited {
+          width: 100%;
+          height: 65px;
           display: flex;
-          flex-direction: column;
-          gap: 13px;
-          width: 90%;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+          padding-left: 10px;
+          gap: 20px;
+          border-bottom: 1px solid var(--input-bg-color);
+          color: var(--create-todo-font);
 
-          &__description {
-            font-size: 15px;
+          &:hover {
+            color: var(--main-font-color);
+            border-bottom: 1px solid var(--main-font-color);
           }
-        }
-        &__edit {
-         cursor: pointer;
+
+          &__deleted {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--input-bg-color);
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+
+            &:hover {
+              &::after {
+                content: '\2713';
+                position: absolute;
+                top: 50%;
+                right: 50%;
+                transform: translate(50%, -50%);
+                font-size: 23px;
+              }
+
+              border: 2px solid var(--create-todo-font);
+            }
+          }
+
+          &__content {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            width: 90%;
+
+            &__description {
+              font-size: 15px;
+            }
+          }
+
+          &__edit {
+            cursor: pointer;
+          }
         }
       }
     }
@@ -252,6 +287,7 @@ getTodos()
             text-align: center;
             line-height: 35px;
             opacity: 0.3;
+
             &:hover,
             &:focus {
               opacity: 1;
@@ -261,6 +297,7 @@ getTodos()
           button {
             background-color: var(--create-todo-focus);
             color: var(--sub-font-color);
+
             &:disabled {
               opacity: 0.3;
             }
