@@ -12,5 +12,8 @@ export default {
     },
     deleteTodos ({todoId}) {
         return apiHelper.delete(`/lists/${todoId}`)
+    },
+    editTodos ({todoId}) {
+        return apiHelper.put(`/lists/${todoId}/edit`)
     }
 }

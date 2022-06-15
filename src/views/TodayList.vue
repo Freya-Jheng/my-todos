@@ -6,8 +6,8 @@
         <!-- render todos here -->
         <div v-for="item in todayLists" :key="item.id"
           class="todo-home__content-list__today__todos__created-todos__created-box">
-          <div 
-            class="todo-home__content-list__today__todos__created-todos__created-box__edited">
+          <input v-model="editingStatus" type="checkbox" name="editing" id="editing">
+          <div :key="item.id" class="todo-home__content-list__today__todos__created-todos__created-box__edited">
             <div @click.prevent.stop="deletedTodos(item.id)"
               class="todo-home__content-list__today__todos__created-todos__created-box__edited__deleted"></div>
             <div class="todo-home__content-list__today__todos__created-todos__created-box__edited__content">
@@ -19,13 +19,14 @@
                 {{ item.description }}
               </span>
             </div>
-            <font-awesome-icon @click.prevent.stop="editCurrentTodo(item)"
-              class="todo-home__content-list__today__todos__created-todos__created-box__edited__edit"
-              :icon="['fa', 'pen-to-square']" />
+            <label for="editing">
+              <font-awesome-icon @click="editCurrentTodo(item)"
+                class="todo-home__content-list__today__todos__created-todos__created-box__edited__edit"
+                :icon="['fa', 'pen-to-square']" />
+            </label>
           </div>
-          <form 
-            v-if="item.id === currentTodo.id"
-            v-show="editingStatus"
+          <form v-if="item.id === currentTodo.id"
+            :key="currentTodo.id" v-show="editingStatus"
             class="todo-home__content-list__today__todos__create-todos__create-box">
             <div class="todo-home__content-list__today__todos__create-todos__create-box__inputs">
               <input v-model="currentTodo.name" type="text" class="name" placeholder="Task">
@@ -33,8 +34,8 @@
             </div>
             <div class="todo-home__content-list__today__todos__create-todos__create-box__buttons">
               <button class="add-todos" type="submit">Save</button>
-              <label>
-                <div @click="editingStatus=false">Cancel</div>
+              <label for="editing">
+                <div>Cancel</div>
               </label>
             </div>
           </form>
@@ -122,9 +123,11 @@ async function deletedTodos(todoId) {
   }
 }
 const editCurrentTodo = (todo) => {
-  currentTodo.value = {...todo}
-  editingStatus.value = true
+  currentTodo.value = {
+    ...todo
+  }
 }
+
 getTodos()
 
 </script>
@@ -156,6 +159,7 @@ getTodos()
         width: 100%;
         display: flex;
         flex-direction: column;
+
         &__edited {
           width: 100%;
           height: 65px;
