@@ -4,10 +4,10 @@
     <div class="todo-home__content-list__today__todos">
       <div class="todo-home__content-list__today__todos__created-todos">
         <!-- render todos here -->
-        <div v-for="item in todayLists" :key="item.id"
+        <div v-for="item in myTodos.todos" :key="item.id"
           class="todo-home__content-list__today__todos__created-todos__created-box">
           <input v-model="editingStatus" type="checkbox" name="editing" id="editing">
-          <div :key="item.id" class="todo-home__content-list__today__todos__created-todos__created-box__edited">
+          <div class="todo-home__content-list__today__todos__created-todos__created-box__edited">
             <div @click.prevent.stop="deletedTodos(item.id)"
               class="todo-home__content-list__today__todos__created-todos__created-box__edited__deleted"></div>
             <div class="todo-home__content-list__today__todos__created-todos__created-box__edited__content">
@@ -25,8 +25,7 @@
                 :icon="['fa', 'pen-to-square']" />
             </label>
           </div>
-          <form v-if="item.id === currentTodo.id"
-            :key="currentTodo.id" v-show="editingStatus"
+          <form @submit="saveEditing(currentTodo)" v-if="item.id === currentTodo.id" :key="currentTodo.id"
             class="todo-home__content-list__today__todos__create-todos__create-box">
             <div class="todo-home__content-list__today__todos__create-todos__create-box__inputs">
               <input v-model="currentTodo.name" type="text" class="name" placeholder="Task">
@@ -35,7 +34,7 @@
             <div class="todo-home__content-list__today__todos__create-todos__create-box__buttons">
               <button class="add-todos" type="submit">Save</button>
               <label for="editing">
-                <div>Cancel</div>
+                <div @click="currentTodo.id={}">Cancel</div>
               </label>
             </div>
           </form>
@@ -71,6 +70,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import listAPI from '@/apis/list.js'
+import { useMyTodos } from "../stores/MyTodosStore";
 
 const checkbox = ref(true)
 const todayLists = ref([])
@@ -78,20 +78,9 @@ const taskName = ref('')
 const taskDescription = ref('')
 const currentTodo = ref({})
 const editingStatus = ref(false)
+const myTodos = useMyTodos()
+myTodos.getTodos()
 
-async function getTodos() {
-  try {
-    const response = await listAPI.getTodos()
-    if (response.statusText !== 'OK') {
-      throw new Error(response.statusText)
-    }
-
-    todayLists.value = response.data.lists
-  } catch (error) {
-    console.log(error)
-    alert('Cannot get todos from API!')
-  }
-}
 async function createTodos() {
   try {
     if (taskName.value.trim().length === 0) {
@@ -101,7 +90,7 @@ async function createTodos() {
       name: taskName.value,
       description: taskDescription.value
     })
-    todayLists.value.push(response.data.list)
+    myTodos.todos.push(response.data.list)
     taskName.value = ''
     taskDescription.value = ''
   } catch (error) {
@@ -115,7 +104,7 @@ async function deletedTodos(todoId) {
     if (response.status !== 200) {
       throw new Error(response.statusText)
     }
-    todayLists.value = todayLists.value.filter(list => list.id !== todoId)
+    myTodos.todos = myTodos.todos.filter(list => list.id !== todoId)
 
   } catch (error) {
     console.log(error)
@@ -126,13 +115,27 @@ const editCurrentTodo = (todo) => {
   currentTodo.value = {
     ...todo
   }
+
+  if (currentTodo.id === todo.id) {
+    editingStatus.value = true
+  }
 }
-
-getTodos()
-
+const saveEditing = (currentTodo) => {
+  todayLists.value = todayLists.value.map((todo) => {
+    if (todo.id === currentTodo.id) {
+      return todo = {...currentTodo}
+    } else {
+      return todo
+    }
+  })
+  editingStatus.value = false
+}
 </script>
 
 <style scoped lang="scss">
+.editing {
+  display: none;
+}
 .todo-home__content-list__today {
   width: 65%;
   min-width: 375px;

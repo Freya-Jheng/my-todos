@@ -85,8 +85,7 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button @click.prevent="createTodos" data-dismiss="modal" type="button"
-                class="btn save">Save</button>
+              <button @click.prevent="createTodos" data-dismiss="modal" type="button" class="btn save">Save</button>
               <button type="button" class="btn cancel" data-dismiss="modal">
                 Cancel
               </button>
@@ -165,12 +164,12 @@
 <script setup>
 import { ref, reactive } from "vue";
 import listAPI from '@/apis/list.js'
-
+import { useMyTodos } from "../stores/MyTodosStore";
+const myTodos = useMyTodos()
 const taskName = ref('')
 const taskDescription = ref('')
 let darkModeChecked = ref(true);
 let id = 0;
-const todayLists = ref([])
 const items = reactive([
   {
     id: id++,
@@ -183,30 +182,16 @@ const items = reactive([
     path: "/my-todo/upcoming",
   },
 ]);
+myTodos.getTodos()
 
-
-// function
-const darkModeToggle = () => {
+// functions
+function darkModeToggle() {
   if (darkModeChecked.value) {
     document.documentElement.setAttribute("data-theme", "darkMode");
   } else {
     document.documentElement.removeAttribute("data-theme", "darkMode");
   }
-};
-async function getTodos() {
-  try {
-    const response = await listAPI.getTodos()
-    if (response.statusText !== 'OK') {
-      throw new Error(response.statusText)
-    }
-
-    todayLists.value = response.data.lists
-  } catch (error) {
-    console.log(error)
-    alert('Cannot get todos from API!')
-  }
 }
-
 async function createTodos() {
   try {
     if (taskName.value.trim().length === 0) {
@@ -217,10 +202,10 @@ async function createTodos() {
       description: taskDescription.value
     })
 
-    if(response.status !== 200) {
-      throw new Error (response.statusText)
+    if (response.status !== 200) {
+      throw new Error(response.statusText)
     }
-    todayLists.value.push(response.data.list)
+    myTodos.todos.push(response.data.list)
     taskName.value = ''
     taskDescription.value = ''
   } catch (error) {
@@ -228,7 +213,6 @@ async function createTodos() {
     alert('Cannot create todos from api!')
   }
 }
-getTodos()
 </script>
 
 <style scoped lang="scss">
@@ -271,6 +255,7 @@ getTodos()
 
     &__input {
       display: none;
+
       &:checked~nav {
         transform: scale(1, 1);
         transform-origin: left;
