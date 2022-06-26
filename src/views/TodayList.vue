@@ -7,7 +7,8 @@
         <div v-for="item in myTodos.todos" :key="item.id"
           class="todo-home__content-list__today__todos__created-todos__created-box">
           <input v-model="editingStatus" type="checkbox" name="editing" id="editing">
-          <div class="todo-home__content-list__today__todos__created-todos__created-box__edited">
+          <div v-show="currentTodo.id !== item.id"
+            class="todo-home__content-list__today__todos__created-todos__created-box__edited">
             <div @click.prevent.stop="deletedTodos(item.id)"
               class="todo-home__content-list__today__todos__created-todos__created-box__edited__deleted"></div>
             <div class="todo-home__content-list__today__todos__created-todos__created-box__edited__content">
@@ -19,13 +20,12 @@
                 {{ item.description }}
               </span>
             </div>
-            <label for="editing">
-              <font-awesome-icon @click="editCurrentTodo(item)"
-                class="todo-home__content-list__today__todos__created-todos__created-box__edited__edit"
+            <label @click="editingMode(item)">
+              <font-awesome-icon class="todo-home__content-list__today__todos__created-todos__created-box__edited__edit"
                 :icon="['fa', 'pen-to-square']" />
             </label>
           </div>
-          <form @submit="saveEditing(currentTodo)" v-if="item.id === currentTodo.id" :key="currentTodo.id"
+          <form v-show="currentTodo.id === item.id"
             class="todo-home__content-list__today__todos__create-todos__create-box">
             <div class="todo-home__content-list__today__todos__create-todos__create-box__inputs">
               <input v-model="currentTodo.name" type="text" class="name" placeholder="Task">
@@ -33,8 +33,8 @@
             </div>
             <div class="todo-home__content-list__today__todos__create-todos__create-box__buttons">
               <button class="add-todos" type="submit">Save</button>
-              <label for="editing">
-                <div @click="currentTodo.id={}">Cancel</div>
+              <label>
+                <div @click="cancelEditing">Cancel</div>
               </label>
             </div>
           </form>
@@ -73,7 +73,6 @@ import listAPI from '@/apis/list.js'
 import { useMyTodos } from "../stores/MyTodosStore";
 
 const checkbox = ref(true)
-const todayLists = ref([])
 const taskName = ref('')
 const taskDescription = ref('')
 const currentTodo = ref({})
@@ -111,24 +110,12 @@ async function deletedTodos(todoId) {
     alert('Cannot delete todos from api!!')
   }
 }
-const editCurrentTodo = (todo) => {
-  currentTodo.value = {
-    ...todo
-  }
-
-  if (currentTodo.id === todo.id) {
-    editingStatus.value = true
-  }
+function editingMode (item) {
+  currentTodo.value = {...item}
+  console.log(currentTodo.value)
 }
-const saveEditing = (currentTodo) => {
-  todayLists.value = todayLists.value.map((todo) => {
-    if (todo.id === currentTodo.id) {
-      return todo = {...currentTodo}
-    } else {
-      return todo
-    }
-  })
-  editingStatus.value = false
+function cancelEditing () {
+  currentTodo.value = {}
 }
 </script>
 
