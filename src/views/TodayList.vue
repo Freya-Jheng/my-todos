@@ -25,14 +25,14 @@
                 :icon="['fa', 'pen-to-square']" />
             </label>
           </div>
-          <form v-show="currentTodo.id === item.id"
+          <form v-show="currentTodo.id === item.id" @submit.prevent.stop="handleSubmit()"
             class="todo-home__content-list__today__todos__create-todos__create-box">
             <div class="todo-home__content-list__today__todos__create-todos__create-box__inputs">
               <input v-model="currentTodo.name" type="text" class="name" placeholder="Task">
               <textarea v-model="currentTodo.description" wrap="hard" placeholder="Descriptioin" rows="7"></textarea>
             </div>
             <div class="todo-home__content-list__today__todos__create-todos__create-box__buttons">
-              <button class="add-todos" type="submit">Save</button>
+              <button :disabled="!currentTodo.name" class="add-todos" type="submit">Save</button>
               <label>
                 <div @click="cancelEditing">Cancel</div>
               </label>
@@ -71,6 +71,7 @@
 import { ref, reactive } from 'vue'
 import listAPI from '@/apis/list.js'
 import { useMyTodos } from "../stores/MyTodosStore";
+import { list } from 'postcss';
 
 const checkbox = ref(true)
 const taskName = ref('')
@@ -116,6 +117,37 @@ function editingMode (item) {
 }
 function cancelEditing () {
   currentTodo.value = {}
+}
+
+async function handleSubmit() {
+  try {
+    if(!currentTodo) {
+      return currentTodo
+    }
+   
+    const response = await listAPI.editTodos({
+      todoId: currentTodo.value.id,
+      name: currentTodo.value.name,
+      description: currentTodo.value.description
+    })
+
+    if(response.status !== 200) {
+      throw new Error(response.statusText)
+    }
+
+    myTodos.todos.forEach((item) => {
+      if (item.id === currentTodo.value.id) {
+        item.name = currentTodo.value.name
+        item.description = currentTodo.value.description
+        item = { ...currentTodo.value }
+      }
+    })
+
+    currentTodo.value = {}
+
+  } catch (error) {
+    console.log(error)
+  }
 }
 </script>
 
