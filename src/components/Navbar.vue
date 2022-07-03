@@ -102,8 +102,10 @@
         <font-awesome-icon v-show="!darkModeChecked" class="todo-home__navbar__right__label__moon icons"
           :icon="['fa', 'moon']" />
       </label>
-      <img data-toggle="modal" data-target="#profileModal" class="todo-home__navbar__right__profile"
-        src="https://i.pravatar.cc/" alt="avatar" />
+      <img @click.prevent="handleBeforeSubmit" data-toggle="modal" data-target="#profileModal"
+        class="todo-home__navbar__right__profile"
+        src="https://user-images.githubusercontent.com/83488932/177002465-f468592f-2671-49ba-8090-bf8b41a0edbd.png"
+        alt="avatar" />
       <!-- profile Modal Start -->
       <div class="modal fade profileModal" id="profileModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -112,47 +114,54 @@
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
             </div>
-            <div class="modal-body">
-              <form class="modal-body__form__content">
-                <div class="modal-body__form__content__name">
-                  <span class="modal-body__form__content__name__title">
-                    姓名
-                  </span>
-                  <input type="text" class="modal-body__form__content__name__input" placeholder="Enter your name" />
+            <form @submit.prevent.stop="handleSubmit()">
+              <div class="modal-body">
+                <div class="modal-body__form__content">
+                  <div class="modal-body__form__content__name">
+                    <span class="modal-body__form__content__name__title">
+                      姓名
+                    </span>
+                    <input v-model="user.name" type="text" class="modal-body__form__content__name__input"
+                      placeholder="Enter your name" />
+                  </div>
+                  <div class="modal-body__form__content__account">
+                    <span class="modal-body__form__content__account__title">
+                      帳號
+                    </span>
+                    <input v-model="user.account" type="text" class="modal-body__form__content__account__input"
+                      placeholder="請輸入至少6位數" />
+                  </div>
+                  <div class="modal-body__form__content__email">
+                    <span class="modal-body__form__content__email__title">
+                      信箱
+                    </span>
+                    <input v-model="user.email" type="email" class="modal-body__form__content__email__input"
+                      placeholder="xxx@example.com" required />
+                  </div>
+                  <div class="modal-body__form__content__password">
+                    <span class="modal-body__form__content__password__title">
+                      密碼
+                    </span>
+                    <input v-model="user.password" type="text" class="modal-body__form__content__password__input"
+                      placeholder="請輸入至少8位數" />
+                  </div>
+                  <div class="modal-body__form__content__checked-password">
+                    <span class="modal-body__form__content__checked-password__title">
+                      確認密碼
+                    </span>
+                    <input v-model="user.checkPassword" type="text"
+                      class="modal-body__form__content__checked-password__input" placeholder="請重新輸入密碼" />
+                  </div>
                 </div>
-                <div class="modal-body__form__content__account">
-                  <span class="modal-body__form__content__account__title">
-                    帳號
-                  </span>
-                  <input type="text" class="modal-body__form__content__account__input" placeholder="請輸入至少6位數" />
-                </div>
-                <div class="modal-body__form__content__email">
-                  <span class="modal-body__form__content__email__title">
-                    信箱
-                  </span>
-                  <input type="email" class="modal-body__form__content__email__input" placeholder="xxx@example.com"
-                    required />
-                </div>
-                <div class="modal-body__form__content__password">
-                  <span class="modal-body__form__content__password__title">
-                    密碼
-                  </span>
-                  <input type="text" class="modal-body__form__content__password__input" placeholder="請輸入至少8位數" />
-                </div>
-                <div class="modal-body__form__content__checked-password">
-                  <span class="modal-body__form__content__checked-password__title">
-                    確認密碼
-                  </span>
-                  <input type="text" class="modal-body__form__content__checked-password__input" placeholder="請重新輸入密碼" />
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn save">Save</button>
-              <button type="button" class="btn cancel" data-dismiss="modal">
-                Cancel
-              </button>
-            </div>
+              </div>
+              <div class="modal-footer">
+                <button :disabled="!user.id||!user.name||!user.email||!user.password||!user.checkPassword" type="submit"
+                  class="btn save" :data-toggle="toggleStatus" data-target="#profileModal">Save</button>
+                <button type="button" class="btn cancel" data-dismiss="modal">
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -163,11 +172,23 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import listAPI from '@/apis/list.js'
+import listAPI from '@/apis/list.js';
+import userAPI from '../apis/user';
 import { useMyTodos } from "../stores/MyTodosStore";
-const myTodos = useMyTodos()
-const taskName = ref('')
-const taskDescription = ref('')
+
+const taskName = ref('');
+const taskDescription = ref('');
+let toggleStatus = 'modal';
+// const user = ref({
+//   id: -1,
+//   name: '',
+//   account: '',
+//   email: '',
+//   password: '',
+//   checkPassword: '',
+// });
+const myTodos = useMyTodos();
+const user = ref({})
 let darkModeChecked = ref(true);
 let id = 0;
 const items = reactive([
@@ -183,6 +204,7 @@ const items = reactive([
   },
 ]);
 myTodos.getTodos()
+myTodos.getUser()
 
 // functions
 function darkModeToggle() {
@@ -191,6 +213,10 @@ function darkModeToggle() {
   } else {
     document.documentElement.removeAttribute("data-theme", "darkMode");
   }
+}
+function handleBeforeSubmit () {
+  user.value = {...myTodos.currentUser}
+  user.value.password=''
 }
 async function createTodos() {
   try {
@@ -213,11 +239,43 @@ async function createTodos() {
     alert('Cannot create todos from api!')
   }
 }
+async function handleSubmit () {
+  try {
+    if (user.value.password !== user.value.checkPassword) {
+      alert('Password and CheckedPassword are not the same !')
+      return
+    }
+
+    if (user.value.password.length < 8) {
+      alert('Password and CheckedPassword need to be at least 8 words !')
+      return
+    }
+
+    if (user.value.account.length < 6) {
+      alert('Account needs to be at least 6 words!')
+      return
+    }
+    const response = await userAPI.editCurrentUser({
+      id: user.value.id,
+      name: user.value.name,
+      account: user.value.account,
+      email: user.value.email,
+      password: user.value.password,
+      checkPassword: user.value.checkPassword,
+    })
+
+    if (response.statusText !== 'OK') {
+      throw new Error(response.statusText)
+    }
+    user.value = {}
+  } catch (err) {
+    console.log(err)
+  }
+}
 </script>
 
 <style scoped lang="scss">
 @import "@/styles/mixins.scss";
-
 .todo-home__navbar {
   width: 100%;
   min-width: 376px;

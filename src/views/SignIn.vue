@@ -42,9 +42,9 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import authorizationAPI from "@/apis/authorization";
-import {useRouter, useRoute} from 'vue-router';
+import {useRouter} from 'vue-router';
 const account = ref("");
 const password = ref("");
 const router = useRouter();

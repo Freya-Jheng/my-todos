@@ -6,7 +6,6 @@
         <!-- render todos here -->
         <div v-for="item in myTodos.todos" :key="item.id"
           class="todo-home__content-list__today__todos__created-todos__created-box">
-          <input v-model="editingStatus" type="checkbox" name="editing" id="editing">
           <div v-show="currentTodo.id !== item.id"
             class="todo-home__content-list__today__todos__created-todos__created-box__edited">
             <div @click.prevent.stop="deletedTodos(item.id)"
@@ -77,7 +76,6 @@ const checkbox = ref(true)
 const taskName = ref('')
 const taskDescription = ref('')
 const currentTodo = ref({})
-const editingStatus = ref(false)
 const myTodos = useMyTodos()
 myTodos.getTodos()
 
@@ -91,6 +89,7 @@ async function createTodos() {
       description: taskDescription.value
     })
     myTodos.todos.push(response.data.list)
+    console.log(response.data.list)
     taskName.value = ''
     taskDescription.value = ''
   } catch (error) {
@@ -111,27 +110,19 @@ async function deletedTodos(todoId) {
     alert('Cannot delete todos from api!!')
   }
 }
-function editingMode (item) {
-  currentTodo.value = {...item}
-  console.log(currentTodo.value)
-}
-function cancelEditing () {
-  currentTodo.value = {}
-}
-
 async function handleSubmit() {
   try {
-    if(!currentTodo) {
+    if (!currentTodo) {
       return currentTodo
     }
-   
+
     const response = await listAPI.editTodos({
       todoId: currentTodo.value.id,
       name: currentTodo.value.name,
       description: currentTodo.value.description
     })
 
-    if(response.status !== 200) {
+    if (response.status !== 200) {
       throw new Error(response.statusText)
     }
 
@@ -149,12 +140,19 @@ async function handleSubmit() {
     console.log(error)
   }
 }
+function editingMode(item) {
+  currentTodo.value = { ...item }
+}
+function cancelEditing() {
+  currentTodo.value = {}
+}
 </script>
 
 <style scoped lang="scss">
 .editing {
   display: none;
 }
+
 .todo-home__content-list__today {
   width: 65%;
   min-width: 375px;
